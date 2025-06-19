@@ -1,0 +1,676 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SmartHome Hub | Project Report</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@300;400;500;700&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #4a6fa5;
+            --secondary: #166088;
+            --accent: #4fc3f7;
+            --dark: #0d1b2a;
+            --light: #e0e1dd;
+            --success: #4caf50;
+            --warning: #ff9800;
+            --danger: #f44336;
+        }
+        
+        body {
+            font-family: 'Rubik', sans-serif;
+            background-color: var(--dark);
+            color: var(--light);
+            margin: 0;
+            padding: 0;
+            line-height: 1.6;
+        }
+        
+        h1, h2, h3, h4 {
+            font-family: 'JetBrains Mono', monospace;
+            font-weight: 500;
+            color: var(--accent);
+        }
+        
+        /* Animated gradient background */
+        .automation-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            background: linear-gradient(-45deg, #0d1b2a, #1b263b, #415a77, #4a6fa5);
+            background-size: 400% 400%;
+            animation: gradientBG 15s ease infinite;
+            opacity: 0.9;
+        }
+        
+        @keyframes gradientBG {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        
+        /* Header with university branding */
+        .university-header {
+            background-color: rgba(13, 27, 42, 0.95);
+            color: white;
+            padding: 1rem 5%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 3px solid var(--accent);
+            backdrop-filter: blur(8px);
+        }
+        
+        .university-logo {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+        
+        .university-logo img {
+            height: 50px;
+        }
+        
+        .report-title {
+            text-align: center;
+            padding: 2rem 5%;
+            background-color: rgba(22, 96, 136, 0.2);
+            color: white;
+            margin-bottom: 2rem;
+            border-bottom: 1px solid rgba(79, 195, 247, 0.3);
+        }
+        
+        .report-title h1 {
+            color: var(--accent);
+            font-size: 2.2rem;
+            margin-bottom: 1rem;
+        }
+        
+        .report-title p {
+            margin: 0;
+            opacity: 0.9;
+        }
+        
+        /* Navigation */
+        .report-nav {
+            background-color: rgba(13, 27, 42, 0.95);
+            padding: 1rem 5%;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            backdrop-filter: blur(8px);
+            border-bottom: 1px solid rgba(79, 195, 247, 0.3);
+        }
+        
+        .report-nav ul {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            flex-wrap: wrap;
+        }
+        
+        .report-nav a {
+            color: var(--light);
+            text-decoration: none;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.95rem;
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+        
+        .report-nav a::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--accent);
+            transition: width 0.3s ease;
+        }
+        
+        .report-nav a:hover::after {
+            width: 100%;
+        }
+        
+        /* Report content sections */
+        .report-section {
+            padding: 3rem 10%;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .section-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 2rem;
+            padding-bottom: 1rem;
+            border-bottom: 2px solid var(--accent);
+        }
+        
+        .section-number {
+            background-color: var(--accent);
+            color: var(--dark);
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            margin-right: 1rem;
+            font-family: 'JetBrains Mono', monospace;
+            font-weight: bold;
+        }
+        
+        .section-title {
+            font-size: 1.8rem;
+            margin: 0;
+        }
+        
+        .content-card {
+            background-color: rgba(22, 96, 136, 0.1);
+            border-radius: 8px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            border-left: 4px solid var(--accent);
+            transition: all 0.3s ease;
+        }
+        
+        .content-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--accent);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+        }
+        
+        .content-card h3 {
+            margin-top: 0;
+            color: var(--accent);
+        }
+        
+        .content-card p, .content-card ul {
+            margin-bottom: 1rem;
+            opacity: 0.9;
+        }
+        
+        .content-card ul {
+            padding-left: 1.5rem;
+        }
+        
+        .content-card li {
+            margin-bottom: 0.5rem;
+        }
+        
+        /* Figures and images */
+        .figure-container {
+            margin: 2rem 0;
+            text-align: center;
+        }
+        
+        .figure-image {
+            max-width: 100%;
+            border-radius: 8px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            border: 1px solid rgba(79, 195, 247, 0.2);
+        }
+        
+        .figure-caption {
+            margin-top: 0.5rem;
+            font-style: italic;
+            color: #aaa;
+        }
+        
+        /* Two-column layout */
+        .two-column {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+        }
+        
+        /* Technical components */
+        .tech-stack {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.8rem;
+            margin: 1.5rem 0;
+        }
+        
+        .tech-item {
+            background: rgba(79, 195, 247, 0.1);
+            border: 1px solid var(--accent);
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-family: 'JetBrains Mono', monospace;
+        }
+        
+        /* Results table */
+        .results-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1.5rem 0;
+        }
+        
+        .results-table th, .results-table td {
+            padding: 0.8rem;
+            text-align: left;
+            border-bottom: 1px solid rgba(79, 195, 247, 0.2);
+        }
+        
+        .results-table th {
+            background-color: rgba(22, 96, 136, 0.3);
+            color: var(--accent);
+        }
+        
+        .results-table tr:nth-child(even) {
+            background-color: rgba(79, 195, 247, 0.05);
+        }
+        
+        /* Footer */
+        .report-footer {
+            background-color: rgba(13, 27, 42, 0.95);
+            color: white;
+            padding: 2rem 5%;
+            text-align: center;
+            border-top: 1px solid rgba(79, 195, 247, 0.3);
+        }
+        
+        .student-info {
+            display: flex;
+            justify-content: space-around;
+            flex-wrap: wrap;
+            margin: 2rem 0;
+        }
+        
+        .student-card {
+            background: rgba(79, 195, 247, 0.1);
+            padding: 1.5rem;
+            border-radius: 8px;
+            width: 300px;
+            margin: 1rem;
+            border: 1px solid rgba(79, 195, 247, 0.2);
+        }
+        
+        .student-card h3 {
+            color: var(--accent);
+            margin-top: 0;
+        }
+        
+        .signature-line {
+            border-top: 1px solid var(--accent);
+            width: 200px;
+            margin: 1rem auto;
+            padding-top: 0.5rem;
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .two-column {
+                grid-template-columns: 1fr;
+            }
+            
+            .report-nav ul {
+                gap: 1rem;
+            }
+            
+            .report-section {
+                padding: 2rem 5%;
+            }
+        }
+        
+        /* Print styles */
+        @media print {
+            body {
+                background-color: white;
+                color: black;
+                font-size: 12pt;
+            }
+            
+            .report-nav, .university-header {
+                display: none;
+            }
+            
+            .report-section {
+                padding: 0;
+                margin: 1cm;
+            }
+            
+            .content-card {
+                box-shadow: none;
+                page-break-inside: avoid;
+                background-color: white !important;
+                color: black !important;
+            }
+        }
+
+        /* Animations */
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+        
+        .floating {
+            animation: float 5s ease-in-out infinite;
+        }
+    </style>
+</head>
+<body>
+    <!-- Animated Background -->
+    <div class="automation-bg"></div>
+    
+    <!-- University Header -->
+    <header class="university-header">
+        <div class="university-logo">
+            <img src="me.jpg" alt="image">
+            <div>
+                <h3>Vaishnavi Khandelwal</h3>
+                <p>Bachelor of Technology Computer Science & Engineering</p>
+            </div>
+        </div>
+        <div>
+            <p>Academic Year: 2024-25</p>
+        </div>
+    </header>
+    
+    <!-- Report Title -->
+    <div class="report-title">
+        <h1>Home Automation Using Wireless Sensor Networks and IoT Technologies</h1>
+        <p>Mini Project Report | Bachelor of Technology in Computer Science & Engineering (AI and DS)</p>
+    </div>
+    
+    <!-- Navigation -->
+    <nav class="report-nav">
+        <ul>
+            <li><a href="#abstract">Abstract</a></li>
+            <li><a href="#introduction">Introduction</a></li>
+            <li><a href="#methodology">Methodology</a></li>
+            <li><a href="#implementation">Implementation</a></li>
+            <li><a href="#results">Results</a></li>
+            <li><a href="#conclusion">Conclusion</a></li>
+        </ul>
+    </nav>
+    
+    <!-- Report Content -->
+    <main>
+        <!-- Abstract Section -->
+        <section id="abstract" class="report-section">
+            <div class="section-header">
+                <div class="section-number">1</div>
+                <h2 class="section-title">Abstract</h2>
+            </div>
+            <div class="content-card">
+                <p>This project presents the design and implementation of a smart home automation system using Wireless Sensor Networks (WSN) and Internet of Things (IoT) technologies. The system overcomes limitations of traditional wired systems by providing a flexible, scalable solution with real-time monitoring, remote control, and automation capabilities.</p>
+                <p>The implemented system integrates various sensors (temperature, humidity, gas, motion) with a NodeMCU microcontroller and Blynk IoT platform. Results demonstrate significant improvements in energy efficiency (30% reduction), responsiveness (2-4s command execution), and user convenience compared to conventional systems.</p>
+            </div>
+        </section>
+        
+        <!-- Introduction Section -->
+        <section id="introduction" class="report-section">
+            <div class="section-header">
+                <div class="section-number">2</div>
+                <h2 class="section-title">Introduction</h2>
+            </div>
+            
+            <div class="content-card">
+                <h3>Project Overview</h3>
+                <p>Home automation refers to the use of technology to control and monitor household devices and systems automatically or remotely. This project transforms a conventional house into a smart home by adding convenience, security, and energy efficiency through WSN and IoT integration.</p>
+                
+                <div class="figure-container">
+                    <img src="smart__home.jpg" alt="Smart Home Concept" class="figure-image">
+                    <p class="figure-caption">Figure 1: Smart Home Automation Concept</p>
+                </div>
+                
+                <h3>Problem Statement</h3>
+                <p>Conventional home automation systems face several limitations:</p>
+                <ul>
+                    <li>Reliance on wired infrastructure limits flexibility and scalability</li>
+                    <li>Lack of integration with modern IoT devices results in fragmented functionality</li>
+                    <li>Centralized control mechanisms create single points of failure</li>
+                    <li>High installation and maintenance costs</li>
+                </ul>
+                
+                <h3>Objectives</h3>
+                <p>The primary objectives of this project are:</p>
+                <ul>
+                    <li>Design a wireless home automation system using WSN and IoT technologies</li>
+                    <li>Implement real-time monitoring of environmental parameters</li>
+                    <li>Enable remote control of home appliances</li>
+                    <li>Improve home security with automated alerts</li>
+                    <li>Optimize energy consumption through smart automation</li>
+                </ul>
+            </div>
+        </section>
+        
+        <!-- Methodology Section -->
+        <section id="methodology" class="report-section">
+            <div class="section-header">
+                <div class="section-number">3</div>
+                <h2 class="section-title">Methodology</h2>
+            </div>
+            
+            <div class="content-card">
+                <h3>System Architecture</h3>
+                <p>The system follows a layered architecture to ensure modularity and scalability:</p>
+                
+                <div class="two-column">
+                    <div>
+                        <h4>1. Sensor Layer</h4>
+                        <p>Utilizes various sensors (DHT11, gas sensor, PIR motion sensor) for real-time environmental data collection.</p>
+                        
+                        <h4>2. Communication Layer</h4>
+                        <p>Wi-Fi modules (ESP8266) enable seamless wireless data transmission between devices and the central hub.</p>
+                        
+                        <h4>3. Processing Layer</h4>
+                        <p>NodeMCU microcontroller processes sensor data and executes control algorithms to manage connected devices.</p>
+                    </div>
+                    <div>
+                        <h4>4. Automation Layer</h4>
+                        <p>Implements predefined rules and responses based on sensor inputs (e.g., turn on lights when motion detected).</p>
+                        
+                        <h4>5. User Interface Layer</h4>
+                        <p>Web and mobile interfaces (Blynk platform) for monitoring and controlling the system remotely.</p>
+                    </div>
+                </div>
+                
+                <div class="figure-container">
+                    <img src="system-architecture.jpg" alt="System Architecture" class="figure-image">
+                    <p class="figure-caption">Figure 2: System Architecture Diagram</p>
+                </div>
+                
+                <h3>Technology Stack</h3>
+                <div class="tech-stack">
+                    <span class="tech-item">Wireless Sensor Networks</span>
+                    <span class="tech-item">IoT Architecture</span>
+                    <span class="tech-item">ESP8266</span>
+                    <span class="tech-item">NodeMCU</span>
+                    <span class="tech-item">Blynk Cloud</span>
+                    <span class="tech-item">Arduino IDE</span>
+                    <span class="tech-item">C++</span>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Implementation Section -->
+        <section id="implementation" class="report-section">
+            <div class="section-header">
+                <div class="section-number">4</div>
+                <h2 class="section-title">Implementation</h2>
+            </div>
+            
+            <div class="content-card">
+                <h3>Hardware Components</h3>
+                <p>The system integrates multiple components working in harmony to deliver smart home automation:</p>
+                <ul>
+                    <li><strong>DHT11 sensor:</strong> Measures temperature and humidity with ±2°C accuracy</li>
+                    <li><strong>MQ-5 Gas sensor:</strong> Detects LPG, natural gas, and other combustible gases</li>
+                    <li><strong>PIR motion sensor:</strong> Detects human presence with 5m range</li>
+                    <li><strong>NodeMCU 1.0V:</strong> ESP8266-based microcontroller with built-in Wi-Fi</li>
+                    <li><strong>Blynk IoT platform:</strong> Cloud-based control and monitoring interface</li>
+                </ul>
+                
+                <div class="figure-container">
+                    <img src="design.jpg" alt="Circuit Diagram" class="figure-image">
+                    <p class="figure-caption">Figure 3: Circuit Diagram of the System</p>
+                </div>
+                
+                <h3>Software Implementation</h3>
+                <p>The system was programmed using Arduino IDE with C++ for the microcontroller. Key algorithms include:</p>
+                
+                <div class="content-card" style="background-color: rgba(13, 27, 42, 0.5); font-family: 'JetBrains Mono', monospace; padding: 1rem; border-radius: 4px; border-left: 4px solid var(--accent);">
+                    <h4>Pseudo Code for Motion Detection</h4>
+                    <pre style="color: var(--light);">
+1. BEGIN
+2. READ data from motion sensor
+3. IF motion is detected THEN
+4.    TURN ON green LED
+5.    UPDATE Blynk with motion status
+6.    PRINT "Motion Detected: Green LED ON"
+7. ELSE
+8.    TURN OFF green LED
+9.    UPDATE Blynk with no motion status
+10.   PRINT "No Motion: Green LED OFF"
+11. END IF
+12. END</pre>
+                </div>
+                
+                <div class="figure-container">
+                    <img src="dash_on.jpg" alt="Blynk Interface" class="figure-image">
+                    <p class="figure-caption">Figure 4: Blynk Mobile Interface</p>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Results Section -->
+        <section id="results" class="report-section">
+            <div class="section-header">
+                <div class="section-number">5</div>
+                <h2 class="section-title">Results and Discussion</h2>
+            </div>
+            
+            <div class="content-card">
+                <h3>System Performance</h3>
+                <p>The implemented system was evaluated across several key metrics:</p>
+                
+                <table class="results-table">
+                    <thead>
+                        <tr>
+                            <th>Metric</th>
+                            <th>Result</th>
+                            <th>Description</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Response Time</td>
+                            <td>2-4 seconds</td>
+                            <td>Average delay for remote commands execution</td>
+                        </tr>
+                        <tr>
+                            <td>Energy Savings</td>
+                            <td>30% reduction</td>
+                            <td>Compared to traditional systems</td>
+                        </tr>
+                        <tr>
+                            <td>Device Integration</td>
+                            <td>10+ devices</td>
+                            <td>Sensors and actuators successfully connected</td>
+                        </tr>
+                        <tr>
+                            <td>User Satisfaction</td>
+                            <td>9/10 rating</td>
+                            <td>Based on ease of use and convenience</td>
+                        </tr>
+                    </tbody>
+                </table>
+                
+                <h3>Discussion</h3>
+                <p>The project successfully demonstrated the feasibility of WSN and IoT for home automation. Key achievements include:</p>
+                <ul>
+                    <li>Real-time monitoring improved decision-making and system control</li>
+                    <li>Automated scheduling optimized energy usage</li>
+                    <li>Improved security features provided timely alerts</li>
+                </ul>
+                
+                <p><strong>Challenges encountered:</strong></p>
+                <ul>
+                    <li>Reliance on stable Wi-Fi connectivity</li>
+                    <li>Initial setup costs for IoT devices and sensors</li>
+                </ul>
+                
+                <div class="figure-container">
+                    <img src="project_working.jpg" alt="Final Circuit" class="figure-image">
+                    <p class="figure-caption">Figure 5: Final Implemented Circuit</p>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Conclusion Section -->
+        <section id="conclusion" class="report-section">
+            <div class="section-header">
+                <div class="section-number">6</div>
+                <h2 class="section-title">Conclusion and Future Work</h2>
+            </div>
+            
+            <div class="content-card">
+                <h3>Conclusion</h3>
+                <p>This project successfully implemented a smart home automation system using WSN and IoT technologies. The system provides:</p>
+                <ul>
+                    <li>Real-time monitoring of environmental parameters</li>
+                    <li>Remote control of home appliances</li>
+                    <li>Energy optimization through automation</li>
+                    <li>Enhanced security features</li>
+                </ul>
+                
+                <p>The solution demonstrates significant improvements over traditional wired systems in terms of flexibility, scalability, and user experience while maintaining cost-effectiveness.</p>
+                
+                <h3>Future Work</h3>
+                <p>Several directions for future enhancement have been identified:</p>
+                <ul>
+                    <li><strong>AI-Driven Automation:</strong> Implement machine learning for predictive automation</li>
+                    <li><strong>Voice Assistant Integration:</strong> Add support for Alexa/Google Assistant</li>
+                    <li><strong>Edge Computing:</strong> Reduce cloud dependence for faster response</li>
+                    <li><strong>Improved Security:</strong> Advanced encryption and intrusion detection</li>
+                    <li><strong>Energy Optimization:</strong> Incorporate renewable energy sources</li>
+                </ul>
+            </div>
+        </section>
+    </main>
+    
+    <!-- Footer with student and guide information -->
+    <footer class="report-footer">
+        <h2>Project Team</h2>
+        
+        <div class="student-info">
+            <div class="student-card">
+                <h3>Student</h3>
+                <p>Vaishnavi Khandelwal</p>
+                <p>University Roll No: 2023942</p>
+                <p>B.Tech CSE (AI & DS)</p>
+                <div class="signature-line">Signature</div>
+            </div>
+            
+            <div class="student-card">
+                <h3>Project Guide</h3>
+                <p>Dr. Himanshu Rai Goyal</p>
+                <p>HOD of B.Tech 1st Year</p>
+                <p>Department of CSE</p>
+                <div class="signature-line">Signature</div>
+            </div>
+        </div>
+        
+        <p>Department of Computer Science and Engineering</p>
+        <p>Graphic Era (Deemed to be University), Dehradun</p>
+        <p>© 2024 All Rights Reserved</p>
+    </footer>
+</body>
+</html>
