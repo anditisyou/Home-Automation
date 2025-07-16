@@ -576,6 +576,100 @@
         .pulse {
             animation: pulse 2s infinite;
         }
+        .hamburger {
+        display: none;
+        flex-direction: column;
+        cursor: pointer;
+        width: 30px;
+        height: 25px;
+        justify-content: space-between;
+    }
+    .bar {
+        height: 4px;
+        width: 100%;
+        background: var(--accent);
+        border-radius: 2px;
+        transition: all 0.3s;
+    }
+    @media (max-width: 700px) {
+        nav {
+            flex-direction: column;
+            align-items: flex-start;
+            padding: 1rem 5%;
+            width: 100%;
+        }
+        .nav-links {
+            flex-direction: column;
+            gap: 1rem;
+            width: 100%;
+            background: rgba(13, 27, 42, 0.95);
+            position: absolute;
+            top: 68px;
+            left: 0;
+            display: none;
+            padding: 1rem 5%;
+        }
+        .nav-links.active {
+            display: flex;
+        }
+        .hamburger {
+            display: flex;
+            margin-left: auto;
+        }
+    }
+    /* New: Make hero section smaller and stack content */
+    @media (max-width: 700px) {
+        .hero {
+            flex-direction: column;
+            padding: 2rem 5%;
+            height: auto;
+            text-align: center;
+        }
+        .hero-content {
+            max-width: 100%;
+        }
+        .hero-visual {
+            display: none;
+        }
+        .section-title {
+            font-size: 1.5rem;
+        }
+    }
+    /* New: Stack features grid, project images, etc. */
+    @media (max-width: 600px) {
+        .features-grid, .results-grid {
+            grid-template-columns: 1fr !important;
+        }
+        .project-showcase {
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+        .project-images {
+            grid-template-columns: 1fr !important;
+        }
+        section {
+            padding: 2rem 2%;
+        }
+        .tech-stack {
+            gap: 0.4rem;
+            font-size: 0.75rem;
+        }
+        .dashboard-header, .dashboard-item span {
+            font-size: 0.8rem;
+        }
+        .dashboard-item i {
+            font-size: 1.1rem;
+        }
+    }
+    /* New: Make footer content more compact on mobile */
+    @media (max-width: 600px) {
+        .footer-content {
+            padding: 1rem 2%;
+        }
+        .footer-links, .social-links {
+            gap: 1rem;
+        }
+    }
     </style>
 </head>
 <body>
@@ -583,12 +677,17 @@
     <div class="automation-bg"></div>
     
     <!-- Navigation -->
-    <nav>
+       <nav>
         <div class="logo">
             <i class="fas fa-home-automation logo-icon"></i>
             <h1>SmartHome Hub</h1>
         </div>
-        <div class="nav-links">
+        <div class="hamburger" id="hamburger-menu">
+            <span class="bar"></span>
+            <span class="bar"></span>
+            <span class="bar"></span>
+        </div>
+        <div class="nav-links" id="nav-links">
             <a href="#about">About</a>
             <a href="#features">Features</a>
             <a href="#architecture">Architecture</a>
@@ -843,6 +942,68 @@
     
     <script>
         // Smooth scrolling for anchor links
+         const hamburger = document.getElementById('hamburger-menu');
+        const navLinks = document.getElementById('nav-links');
+        hamburger.addEventListener('click', () => {
+            navLinks.classList.toggle('active');
+        });
+
+        // Smooth scrolling for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+                navLinks.classList.remove('active'); // Close menu on mobile after click
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                    behavior: 'smooth'
+                });
+            });
+        });
+        
+        // Animation on scroll
+        window.addEventListener('scroll', () => {
+            const scrollPosition = window.scrollY;
+            document.querySelectorAll('.feature-card, .layer, .result-card').forEach((card, index) => {
+                if (scrollPosition > card.offsetTop - window.innerHeight + 100) {
+                    card.style.opacity = '1';
+                    card.style.transform = 'translateY(0)';
+                }
+            });
+        });
+        // Initialize animations
+        document.querySelectorAll('.feature-card, .layer, .result-card').forEach((card, index) => {
+            card.style.opacity = '0';
+            card.style.transform = 'translateY(20px)';
+            card.style.transition = `opacity 0.5s ${index * 0.1}s ease, transform 0.5s ${index * 0.1}s ease`;
+        });
+        // Simulate live data in dashboard preview
+        function updateDashboard() {
+            const tempElement = document.querySelector('.dashboard-item:nth-child(1) span');
+            const humidityElement = document.querySelector('.dashboard-item:nth-child(2) span');
+            const gasElement = document.querySelector('.dashboard-item:nth-child(3) span');
+            const lightElement = document.querySelector('.dashboard-item:nth-child(4) span');
+            const energyElement = document.querySelector('.dashboard-item:nth-child(6) span');
+            // Simulate realistic fluctuations
+            const baseTemp = 24;
+            const baseHumidity = 45;
+            const baseEnergy = 1.2;
+            const tempVariation = (Math.random() * 2 - 1).toFixed(1);
+            const humidityVariation = (Math.random() * 5 - 2.5).toFixed(0);
+            const energyVariation = (Math.random() * 0.3 - 0.15).toFixed(1);
+            tempElement.textContent = `Temperature: ${(baseTemp + parseFloat(tempVariation)).toFixed(1)}°C`;
+            humidityElement.textContent = `Humidity: ${(baseHumidity + parseInt(humidityVariation))}%`;
+            energyElement.textContent = `Energy: ${(baseEnergy + parseFloat(energyVariation)).toFixed(1)}kW`;
+            // Randomly toggle lights and gas status for demo purposes
+            if (Math.random() > 0.7) {
+                const lightStates = ['On', 'Off'];
+                const gasStates = ['Safe', 'Warning!'];
+                lightElement.textContent = `Lights: ${lightStates[Math.floor(Math.random() * lightStates.length)]}`;
+                gasElement.textContent = `Gas: ${gasStates[Math.floor(Math.random() * gasStates.length)]}`;
+            }
+        }
+        // Update dashboard every 3 seconds
+        setInterval(updateDashboard, 3000);
+        updateDashboard();
+        
         document.querySelectorAll('a[href^="#"]').forEach(anchor => {
             anchor.addEventListener('click', function(e) {
                 e.preventDefault();
